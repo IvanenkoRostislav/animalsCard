@@ -5,7 +5,7 @@ export default function Mainlayout(){
     return(
         <section className="flex min-h-screen flex-col">
             <Header/>
-        <main className="flex flex-col flex-1  items-center justify-center">
+        <main className="flex flex-col flex-1 ">
             <Outlet/>
         </main>
         </section>
