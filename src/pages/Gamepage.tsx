@@ -1,5 +1,5 @@
-import { Link, useLocation} from "react-router";
-import { useState } from "react";
+import { Link, useLocation, useNavigate} from "react-router";
+import { useState, useEffect } from "react";
 import { tv } from "tailwind-variants";
 import AnimalPoup from "../components/common/AnimalPopup";
 import { animals } from "../data/animal";
@@ -14,6 +14,7 @@ type Animal = {
         second: string;
         third: string;
     };
+    correctAnswer: string;
 }
 
 
@@ -26,10 +27,17 @@ export default function Gamepage() {
     const gameName = location.state?.gameName || "USER1234";
     const [startIndex, setStartIndex] = useState(0);
     const [usedCards, setUsedCards] = useState<string[]>([]);
-    const firstMark : number = 25;
+    const firstMark : number = 15;
+    const secondMark : number = 35;
+    const navigate = useNavigate();
     
     const animalsBoard = animals.filter(animal => !usedCards.includes(animal.id) ).slice(startIndex, startIndex + 4);
 
+    useEffect(() => {
+        if (animalsBoard.length <= 0){
+            navigate("/gameover", {state: {gameName, marksG}});
+        }
+    }, [animalsBoard, navigate, gameName, marksG]);
     
     const chosenCard = tv ({
         base: "text-3xl border  rounded-[15px] w-[470px] h-[250px] overflow-hidden  hover:opacity-90 hover:cursor-pointer",
@@ -44,8 +52,11 @@ export default function Gamepage() {
     },
     });
 
-    function hadleCorrectAnswer(): void {
+    function hadleCorrectAnswer_ONE(): void {
         setMarksG(prevMarks=> prevMarks + firstMark);
+    }
+    function hadleCorrectAnswer_TWO(): void {
+        setMarksG(prevMarks=> prevMarks + secondMark);
     }
     function anulation(): void {
         if (animalsBoard.length <= 0){
@@ -64,9 +75,7 @@ export default function Gamepage() {
         setSelectedId(null);
         setSelectedAnimal(null);
         setIsOpen(false);
-    } 
-
-
+    }
     return (
     <main className="bg-white flex-1 flex gap-4 ">
         <aside className="flex flex-col gap-3 justify-center w-[15%] border border-gray-500 p-4">
@@ -84,9 +93,11 @@ export default function Gamepage() {
             onClose={() => {
                 setIsOpen(false);
                 hadleRemoveCard();
-            }}
-            correctAnswer = {hadleCorrectAnswer}
+            }} 
+            correctAnswer_ONE = {hadleCorrectAnswer_ONE}
+            correctAnswer_TWO = {hadleCorrectAnswer_TWO}
             marks = {firstMark}
+            secondMark = {secondMark}
             nextCard = {hadleRemoveCard}
             />}
             {animalsBoard.map((animal) => (
