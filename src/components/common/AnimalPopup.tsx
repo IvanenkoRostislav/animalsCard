@@ -21,11 +21,10 @@ type AnimalPoupProps = {
     correctAnswer_ONE: () => void;
     correctAnswer_TWO: () => void;
     marks : number;
-    nextCard: () => void;
     secondMark?: number;
 }
 
-export default function AnimalPoup({onClose, animal, correctAnswer_ONE: correctAnswer_ONE, correctAnswer_TWO,  marks, secondMark, nextCard}:AnimalPoupProps){
+export default function AnimalPoup({onClose, animal, correctAnswer_ONE: correctAnswer_ONE, correctAnswer_TWO,  marks, secondMark}:AnimalPoupProps){
     const [answer, setAnswer] = useState("");
     const [answerTrue,setAnswerTrue] = useState<boolean | null> (null);
     const [answerTrue_TWO,setAnswerTrue_TWO] = useState<boolean | null> (null);
@@ -80,8 +79,7 @@ export default function AnimalPoup({onClose, animal, correctAnswer_ONE: correctA
     return(
         <div className=" fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
             <section className="relative bg-white border border-black p-4 pt-14 rounded-[15px] flex flex-col gap-3 w-[500px] ">
-                <button  onClick={() =>{onClose(); nextCard()}
-                    } className="absolute top-4 right-4 active:scale-90 hover:cursor-pointer">
+                <button  onClick={onClose} className="absolute top-4 right-4 active:scale-90 hover:cursor-pointer">
                 <FaWindowClose size={30} color="red"/>
                 </button>                     
                 <img src={animal.image} alt="secretName" className=" w-100 h-50 object-cover"/>

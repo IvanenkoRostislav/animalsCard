@@ -118,5 +118,126 @@ export const animals = [
             third: "Антилопа"
         },
         correctAnswer: "second"
+    },
+    {
+        id: "fossa",
+        name: "Фоса",
+        image: "images/fossa.png",
+        question: "Яка група тварин є близькими родичами фоси?",
+        variants: {
+            first: "Коти",
+            second: "Мангустові",
+            third: "Вовки"
+        },
+        correctAnswer: "second"
+    },
+    {
+        id: "binturong",
+        name: "Бінтуронг",
+        image: "images/binturong.png",
+        question: "Який незвичайний запах характерний для бінтуронга?",
+        variants: {
+            first: "Свіжої м'яти",
+            second: "Шоколаду",
+            third: "Попкорну"
+        },
+        correctAnswer: "third"
+    },
+    {
+        id: "leafy_seadragon",
+        name: "Листяний морський дракон",
+        image: "images/leafy_seadragon.png",
+        question: "Хто виношує ікринки листяного морського дракона?",
+        variants: {
+            first: "Самець на хвості",
+            second: "Самка в спеціальній сумці",
+            third: "Обидва батьки в гнізді"
+        },
+        correctAnswer: "first"
+    },
+    {
+        id: "giant_isopod",
+        name: "Гігантський ізопод",
+        image: "images/giant_isopod.png",
+        question: "Чим переважно живиться гігантський ізопод?",
+        variants: {
+            first: "Водоростями біля поверхні",
+            second: "Рештками організмів на морському дні",
+            third: "Виключно живими акулами"
+        },
+        correctAnswer: "second"
+    },
+    {
+        id: "saiga",
+        name: "Сайгак",
+        image: "images/saiga.png",
+        question: "Для чого сайгаку потрібен незвичайний великий ніс?",
+        variants: {
+            first: "Для зберігання води",
+            second: "Для пошуку їжі під землею",
+            third: "Для фільтрації пилу та зігрівання повітря"
+        },
+        correctAnswer: "third"
+    },
+    {
+        id: "pangolin",
+        name: "Панголін",
+        image: "images/pangolin.png",
+        question: "З якої речовини складаються луски панголіна?",
+        variants: {
+            first: "Кератину",
+            second: "Кісткової тканини",
+            third: "Хітину"
+        },
+        correctAnswer: "first"
+    },
+    {
+        id: "echidna",
+        name: "Єхидна",
+        image: "images/echidna.png",
+        question: "Яку незвичайну особливість розмноження має єхидна?",
+        variants: {
+            first: "Народжує живих дитинчат",
+            second: "Відкладає яйця",
+            third: "Розмножується поділом"
+        },
+        correctAnswer: "second"
+    },
+    {
+        id: "axolotl",
+        name: "Аксолотль",
+        image: "images/axolotl.png",
+        question: "Що здатен відновлювати аксолотль після пошкодження?",
+        variants: {
+            first: "Лише шкіру",
+            second: "Лише хвіст",
+            third: "Кінцівки та частини деяких органів"
+        },
+        correctAnswer: "third"
+    },
+    {
+        id: "tapir",
+        name: "Тапір",
+        image: "images/tapir.png",
+        question: "Які тварини є найближчими сучасними родичами тапірів?",
+        variants: {
+            first: "Коні та носороги",
+            second: "Свині та бегемоти",
+            third: "Слони та ламантини"
+        },
+        correctAnswer: "first"
+    },
+    {
+        id: "aye_aye",
+        name: "Ай-ай",
+        image: "images/aye_aye.png",
+        question: "Для чого ай-ай використовує свій довгий середній палець?",
+        variants: {
+            first: "Для плавання",
+            second: "Для пошуку та діставання личинок із деревини",
+            third: "Для захисту від хижаків"
+        },
+        correctAnswer: "second"
     }
+
 ];
