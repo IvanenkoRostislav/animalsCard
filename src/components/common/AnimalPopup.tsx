@@ -1,8 +1,6 @@
-import { FaWindowClose } from "react-icons/fa";
-import { useState } from "react";
+import { IoClose } from "react-icons/io5";
+import { useState,useEffect } from "react";
 import { tv } from "tailwind-variants";
-
-
 
 type AnimalPoupProps = {
     onClose: () =>void;
@@ -73,28 +71,44 @@ export default function AnimalPoup({onClose, animal, correctAnswer_ONE: correctA
         handleCheckAnswerTwo();
         setIsClick2(true);
     }
-    
+    useEffect(()=> {
+        const isFinished = answerTrue === false || (answerTrue === true && answerTrue_TWO !== null);
+
+        if(!isFinished) return;
+
+        const timer = setTimeout(() => {
+            onClose();
+
+        }, 2000)
+        return () => clearTimeout(timer);
+    }, [answerTrue, answerTrue_TWO, onClose]);
     
 
     return(
         <div className=" fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <section className="relative bg-white border border-black p-4 pt-14 rounded-[15px] flex flex-col gap-3 w-[500px] ">
-                <button  onClick={onClose} className="absolute top-4 right-4 active:scale-90 hover:cursor-pointer">
-                <FaWindowClose size={30} color="red"/>
+            <form className="relative bg-white border border-black p-4 pt-14 rounded-[15px] flex flex-col gap-3 w-[500px]"
+            onSubmit= {(e) => {
+                e.preventDefault();
+                handleCheckClick_ONE();
+            }}
+            >
+                <button type="button" onClick={onClose} className="absolute top-4 right-4 active:scale-90 hover:cursor-pointer">
+                <IoClose size={30} color="#FF5A1F"/>
                 </button>                     
-                <img src={animal.image} alt="secretName" className=" w-100 h-50 object-cover"/>
-                <p className="p-1">Введи назву тварину</p>
+                <img 
+                src={animal.image} 
+                alt="secretName" 
+                className=" w-100 h-50 object-cover self-center rounded-[15px]"/>
                 <input type="text" placeholder="Введи назву тварину" className="border border-gray-300 rounded-md p-2 w-full"  onChange={(e) => setAnswer(e.target.value)} value={answer}/>
                 <button 
-                type="button" 
-                onClick={handleCheckClick_ONE}
+                type="submit" 
                 disabled={isClick}
                 className={btnanswer({disabled: isClick})}>Перевірити</button>
                 {answerTrue &&(
                 <>
                     <p className="text-green-500 bg-green-200 p-2 rounded-[15px]">Вірно! Вам нараховано {marks} балів</p>
                     <p>{animal.question}</p>
-                    <form className="flex flex-col gap-3 text-1xl" >
+                    <div className="flex flex-col gap-3 text-1xl" >
                         <label>
                             <input 
                             type="radio" 
@@ -138,14 +152,14 @@ export default function AnimalPoup({onClose, animal, correctAnswer_ONE: correctA
                             disabled={isClick2}
                             className={btnanswer({disabled: isClick2})}>Перевірити
                         </button>
-                    </form>
+                    </div>
                 </>)}
                 {answerTrue === false &&(
                     <p className="text-red-500 bg-red-200 p-2 rounded-[15px]"> 
                     Ви не вгадали тварину
                     </p>
                 )}
-        </section>
+        </form>
         </div>
         
     )

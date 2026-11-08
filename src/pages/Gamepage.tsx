@@ -6,6 +6,9 @@ import { animals } from "../data/animal";
 import { botTurn } from "../utils/bot";
 import { createAnimalMap } from "../data/funcanimals";
 
+import { LuBot } from "react-icons/lu";
+import { RiUser3Fill } from "react-icons/ri";
+
 type Animal = {
     id: string;
     name: string;
@@ -31,6 +34,7 @@ export default function Gamepage() {
     const [marksG, setMarksG] = useState(0);
     const location = useLocation();
     const gameName = location.state?.gameName || "USER1234";
+    const levelGame = location.state?.levelGame || "easy";
     const [botMark, setBotMark] = useState(0);
     const [current, setCurrent] = useState<"player" | "bot"> ("player");
 
@@ -41,6 +45,33 @@ export default function Gamepage() {
     const activeCards = current=== "player" ? playerCards : botCards;
     const animalsBoard = activeCards.slice(0, 4);
 
+
+    const chosenCard = tv ({
+        base: "text-3xl border  rounded-[15px] w-[470px] h-[250px] overflow-hidden  hover:opacity-90 hover:cursor-pointer",
+        variants: {
+            selected :{
+                true: "border-7 border-orange-400 scale-105",
+                false: "",
+            },
+        },
+        defaultVariants: {
+    selected: false,
+    },});
+
+    const GameField = tv ({
+        base: "p-6 grid  grid-cols-[repeat(2,470px)] gap-8 justify-center items-center cotent-start ",
+        variants: {
+            player :{
+                true: "bg-green-100",
+                false: "bg-red-200",
+            },
+        },
+        defaultVariants: {
+        player: true,
+    },
+    });
+
+    //USEEFECT
     useEffect(() => {
     const playerFinished = playerCards.length === 0;
     const botFinished = botCards.length === 0;
@@ -70,26 +101,15 @@ export default function Gamepage() {
     useEffect(() => {
         if (current !== "bot" || botCards.length ===0) return;
         const timer = setTimeout(()=>{
-            const marks = botTurn();
+            const marks = botTurn(levelGame);
             setBotMark(prev => prev + marks);
             setBotCards(prev => prev.slice(1));
             setCurrent("player");
         }, 4000);
         return () => clearTimeout(timer);
-    },[current, botCards.length]);
+    },[current, botCards.length, levelGame]);
     
-    const chosenCard = tv ({
-        base: "text-3xl border  rounded-[15px] w-[470px] h-[250px] overflow-hidden  hover:opacity-90 hover:cursor-pointer",
-        variants: {
-            selected :{
-                true: "border-7 border-orange-400 scale-105",
-                false: "",
-            },
-        },
-        defaultVariants: {
-    selected: false,
-    },
-    });
+   
     //FUNCTIONS
     function hadleCorrectAnswer_ONE(): void {
         setMarksG(prevMarks=> prevMarks + firstMark);
@@ -106,7 +126,7 @@ export default function Gamepage() {
     }
     function hadleRemoveCard(): void{
         if(current !== "player" || selectedId === null) return;
-          setPlayerCards(prev => prev.filter(animal => animal.id !== selectedId));
+        setPlayerCards(prev => prev.filter(animal => animal.id !== selectedId));
         setSelectedId(null);
         setSelectedAnimal(null);
         setIsOpen(false);
@@ -114,9 +134,10 @@ export default function Gamepage() {
     }
     return (
     <main className="bg-white flex-1 flex gap-4 ">
-        <aside className="flex flex-col gap-3 justify-center w-[15%] border border-gray-500 p-4">
-            <h2 className="text-4xl">{gameName}</h2>
-            <p className="text-blue-500 text-2xl">{marksG}балів</p>
+        <aside className="flex flex-col gap-4 justify-start w-[15%] border border-gray-500 p-4 items-center">
+            <RiUser3Fill size={40} />
+            <h2 className="text-1xl max-w-[90%] wrap-anywhere">{gameName}</h2>
+            <p className="text-3xl text-blue-600">{marksG}балів</p>
             <button className="inline-block bg-orange-500 text-xl  p-2 text-white rounded-[15px] active:scale-95 active:bg-orange-700" onClick={handleSkipCard} 
             disabled={current !== "player" || isOpen || playerCards.length === 0}>
             Пропустити хід</button>
@@ -133,42 +154,46 @@ export default function Gamepage() {
                 onClick={() => setCurrent("bot")}>
                 Показати картки бота
             </button>
-            {current === "player" ? (
-                <p className="text-green-500 text-3xl">Твій хід</p>
-            ) : (
-                <p className="text-red-500 text-3xl">Хід бота</p>
-            )}
+            
         </aside>    
         <Link to = "/gameover" className="absolute inline-block bg-orange-500 text-xl  p-2 text-white rounded-[15px] top-[70px] right-[320px] active:scale-95 active:bg-orange-700" state={{ gameName, marksG }}>
             <p>Завершити</p>
         </Link>
-        <section className ="pt-15 grid  grid-cols-[repeat(2,470px)] gap-8 justify-center items-center cotent-start w-[70%] ">
-            {isOpen &&  selectedAnimal && 
-            <AnimalPoup 
-            animal={selectedAnimal} 
-            onClose={hadleRemoveCard} 
-            correctAnswer_ONE = {hadleCorrectAnswer_ONE}
-            correctAnswer_TWO = {hadleCorrectAnswer_TWO}
-            marks = {firstMark}
-            secondMark = {secondMark}
-            />}
-            {animalsBoard.map((animal) => (
-            <button key= {animal.id}  
-            onClick={() => {
-                
-                setSelectedId(animal.id); 
-                setIsOpen(true);
-                setSelectedAnimal(animal);
-                
-            }}
-            disabled={current !== "player"} 
-                className ={chosenCard({selected: selectedId === animal.id})} type="button" >
-                <img src={animal.image} alt="secretName" className=" w-full h-full object-cover"/>
-            </button>))}
+        <section className="flex flex-col w-[70%] gap-2">
+            <section className="flex flex-row items-center gap-100 justify-start  p-4">
+                {current === "player" ? 
+                (<p className="text-green-500 text-4xl font-bold">Твій хід</p>) : 
+                (<p className="text-red-500 text-4xl font-bold">Хід бота</p>)}
+                <p> 00:17:00</p>
+            </section>
+            <section className = {GameField({player: current === "player"})}>
+                {isOpen &&  selectedAnimal && 
+                <AnimalPoup 
+                animal={selectedAnimal} 
+                onClose={hadleRemoveCard} 
+                correctAnswer_ONE = {hadleCorrectAnswer_ONE}
+                correctAnswer_TWO = {hadleCorrectAnswer_TWO}
+                marks = {firstMark}
+                secondMark = {secondMark}
+                />}
+                {animalsBoard.map((animal) => (
+                <button key= {animal.id}  
+                onClick={() => {
+                    setSelectedId(animal.id); 
+                    setIsOpen(true);
+                    setSelectedAnimal(animal);
+                    
+                }}
+                disabled={current !== "player"} 
+                    className ={chosenCard({selected: selectedId === animal.id})} type="button" >
+                    <img src={animal.image} alt="secretName" className=" w-full h-full object-cover"/>
+                </button>))}
+            </section>
+            
         </section>
-        <aside className=" w-[15%] border border-gray-500">
-           <p>Бот: {botMark} балів</p>
-            <p>{current === "bot" ? "Бот думає…" : "Твій хід"}</p>
+        <aside className=" w-[15%] border border-gray-500 flex flex-col items-center gap-4 p-4 ">
+            <h2 className="text-1xl"><LuBot color ="red" size={40}/> Бот</h2>
+            <p className="text-3xl text-blue-600">{botMark} балів</p>
         </aside>
     </main>
     );
